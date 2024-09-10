@@ -1,14 +1,17 @@
 const { test, expect } = require('@playwright/test');
+const HomePage = require('../pages/HomePage');
 
 test.describe('Homepage', () => {
   test('has correct title', async ({ page }) => {
-    await page.goto('https://playwright.dev/');
-    await expect(page).toHaveTitle(/Playwright/);
+    const homePage = new HomePage(page);
+    await homePage.navigate();
+    expect(await homePage.getTitle()).toBe('Playwright');
   });
 
-  test('has working navigation', async ({ page }) => {
-    await page.goto('https://playwright.dev/');
-    await page.click('text=Docs');
-    await expect(page).toHaveURL(/.*docs/);
+  test('can navigate to Get Started', async ({ page }) => {
+    const homePage = new HomePage(page);
+    await homePage.navigate();
+    await homePage.clickGetStarted();
+    await expect(page).toHaveURL(/.*docs\/intro/);
   });
 });
